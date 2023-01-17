@@ -1,2 +1,2 @@
-node_modules
+node_modules //adding node modules to gitignore
 .DS_store
