@@ -33,56 +33,56 @@ let myMovies = [
     director: 'Mike Nichols',
     release: '1996',
     starring: 'Robin Williams, Nathan Lane, Gene Hackman'
-  }
+  },
   {
     title: 'Avatar',
     producer: 'James Cameron',
     director: 'James Cameron',
     release: '2009',
     starring: 'Zoe Saldana, Sam Worthington, Sigourney Weaver'
-  }
+  },
   {
     title: 'The Iron Giant',
     producer: 'Allison Abbate, Des McAnuff',
     director: 'Brad Bird',
     release: '1999',
     starring: 'Vin Diesel, Eli Marienthal, Jennifer Aniston'
-  }
+  },
   {
     title: 'Queen & Slim',
     producer: 'Malina Matsoukas, Lena Waithe',
     director: 'Melina Matsoukas',
     release: '2019',
     starring: 'Daniel Kaluuya, Jodie Turner-Smith, Bokeem Woodbine'
-  }
+  },
   {
     title: 'Only',
     producer: 'Eyal Rimmon, Gabrielle Pickle',
     director: 'Takashi Doscher',
     release: '2019',
     starring: 'Freida Pinto, Leslie Odom Jr.'
-  }
+  },
   {
     title: 'Inglourious Basterds',
     producer: 'Lawrence Bender',
     director: 'Quentin Tarantino',
     release: '2009',
     starring: 'Christoph Waltz, Brad Pitt, Eli Roth'
-  }
+  },
   {
     title: 'Django Unchained',
     producer: 'Reginald Hudlin, Stacey Sher, Pilar Savone, Harvey Weinstein, Bob Weinstein, Quentin Tarantino',
     director: 'Quentin Tarantino',
     release: '2012',
     starring: 'Christoph Waltz, Jamie Foxx, Leonardo DiCaprio'
-  }
+  },
   {
     title: 'O Brother, Where Art Thou?',
     producer: 'Joel Coen, Ethan Coen',
     director: 'Joel Coen, Ethan Coen',
     release: '2000',
     starring: 'George Clooney, John Turturro, Tim Blake Nelson, John Goodman'
-  }
+  },
 ];
 
 /* GET requests */
