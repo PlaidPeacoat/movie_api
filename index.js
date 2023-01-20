@@ -5,13 +5,14 @@ const app = express();
 const fs = require('fs');
 const path = require ('path');
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a',});
+
 //using morgan instead of mylogger function
 app.use(morgan('common', {stream: accessLogStream}));
 //allows the return of multiple files in response to requests
 app.use(express.static('public'));
 
-let topMovies = [
+let myMovies = [
   {
     title: 'Good Will Hunting',
     producer: 'Lawrence Bender',
@@ -84,27 +85,24 @@ let topMovies = [
   }
 ];
 
-// GET requests
-
-app.get('/', (req, res) => {
-  res.send('Welcome to Movie Find!');
-});
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('It\'s not working right now!');
+/* GET requests */
+app.get("/movies", (req, res) => {
+    res.json(myMovies);
   });
-
-app.get('/documentation', (req, res) => {                  
-  res.sendFile('public/documentation.html', { root: __dirname });
-});
-
-app.get('/movies', (req, res) => {
-  res.json(topMovies);
-});
-
-
-// listen for requests
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
-});
+  
+  /* res.send object replaces response.writeHead and response.end code */
+  app.get("/", (req, res) => {
+    res.send("Welcome to the Movie Find App!");
+  });
+  
+  /* error handler comes after all route calls and app.use but before app.listen */
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("It's not working right now!");
+  });
+  
+  /* listen for requests, replaces http.createServer code */
+  app.listen(8080, () => {
+    console.log("Your app is listening on port 8080.");
+  });
+  
