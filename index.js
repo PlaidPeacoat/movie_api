@@ -1,108 +1,265 @@
+/* importing all needed packages locally */
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-
 const fs = require('fs');
-const path = require ('path');
+const path = require('path');
+const bodyParser = require("body-parser");
+const uuid = require("uuid");
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a',});
+/* invoking morgan, instead of myLogger() function */
+app.use(morgan('common', {
+  stream: fs.createWriteStream('./log.txt.log', {flags: 'a'})
+}));
+app.use(morgan('dev'));
 
-//using morgan instead of mylogger function
-app.use(morgan('common', {stream: accessLogStream}));
-//allows the return of multiple files in response to requests
+/* allows the return of multiple static files in response to a request */
 app.use(express.static('public'));
+app.use(bodyParser.json());
 
-let myMovies = [
+let users = [
   {
-    title: 'Good Will Hunting',
-    producer: 'Lawrence Bender',
-    director: 'Gus Van Sant',
-    release: '1997',
-    starring: 'Matt Damon, Robin Williams, Ben Affleck'
+    "id": "1.1",
+    "name": "John",
+    "favoriteMovie": []
   },
   {
-    title: 'Mrs. Doubtfire',
-    producer: 'Robin Williams, Mark Radcliffe, Marsha Garces Williams',
-    director: 'Chris Columbus',
-    release: '1993',
-    starring: 'Robin Williams, Sally Field, Pierce Brosnan'
-  },
-  {
-    title: 'The Birdcage',
-    producer: 'Mike Nichols',
-    director: 'Mike Nichols',
-    release: '1996',
-    starring: 'Robin Williams, Nathan Lane, Gene Hackman'
-  },
-  {
-    title: 'Avatar',
-    producer: 'James Cameron',
-    director: 'James Cameron',
-    release: '2009',
-    starring: 'Zoe Saldana, Sam Worthington, Sigourney Weaver'
-  },
-  {
-    title: 'The Iron Giant',
-    producer: 'Allison Abbate, Des McAnuff',
-    director: 'Brad Bird',
-    release: '1999',
-    starring: 'Vin Diesel, Eli Marienthal, Jennifer Aniston'
-  },
-  {
-    title: 'Queen & Slim',
-    producer: 'Malina Matsoukas, Lena Waithe',
-    director: 'Melina Matsoukas',
-    release: '2019',
-    starring: 'Daniel Kaluuya, Jodie Turner-Smith, Bokeem Woodbine'
-  },
-  {
-    title: 'Only',
-    producer: 'Eyal Rimmon, Gabrielle Pickle',
-    director: 'Takashi Doscher',
-    release: '2019',
-    starring: 'Freida Pinto, Leslie Odom Jr.'
-  },
-  {
-    title: 'Inglourious Basterds',
-    producer: 'Lawrence Bender',
-    director: 'Quentin Tarantino',
-    release: '2009',
-    starring: 'Christoph Waltz, Brad Pitt, Eli Roth'
-  },
-  {
-    title: 'Django Unchained',
-    producer: 'Reginald Hudlin, Stacey Sher, Pilar Savone, Harvey Weinstein, Bob Weinstein, Quentin Tarantino',
-    director: 'Quentin Tarantino',
-    release: '2012',
-    starring: 'Christoph Waltz, Jamie Foxx, Leonardo DiCaprio'
-  },
-  {
-    title: 'O Brother, Where Art Thou?',
-    producer: 'Joel Coen, Ethan Coen',
-    director: 'Joel Coen, Ethan Coen',
-    release: '2000',
-    starring: 'George Clooney, John Turturro, Tim Blake Nelson, John Goodman'
-  },
+    "id": "1.2",
+    "name": "Sarah",
+    "favoriteMovie": ["Kill Bill"],
+  }
 ];
 
-/* GET requests */
-app.get("/movies", (req, res) => {
-    res.json(myMovies);
-  });
+let movies = [
+    {
+      "title": "2001: A Space Odyssey",
+      "description": "describe movie",
+      "release": "1968",
+      "genre": {
+        "name": "comedy",
+        "description": "placeholder description",
+      },
+      "director": {
+        "name": "placeholder",
+        "bio": "placeholder bio",
+        "birth year": "1970",
+        "death year": "2023",
+      },
+      "imageUrl": "link to image URL",
+      "featured":false
+    },
+    {
+      "title": "The Godfather",
+      "description": "describe movie",
+      "release": "1972",
+      "genre": {
+        "name": "thriller",
+        "description": "placeholder description",
+      },
+      "director": {
+        "name": "placeholder",
+        "bio": "placeholder bio",
+        "birth year": "1970",
+        "death year": "2023",
+      },
+      "imageUrl": "link to image URL",
+      "featured":false
+    },
+    {
+      "title": "Citizen Kane",
+      "description": "describe movie",
+      "release": "1941",
+      "genre": {
+        "name": "comedy",
+        "description": "placeholder description",
+      },
+      "director": { 
+        "name": "placeholder",
+        "bio": "placeholder bio",
+        "birth year": "1970",
+        "death year": "2023",
+      },
+      "imageUrl": "link to image URL",
+      "featured":false
+    },
+    {
+      "title": "Raiders of the Lost Ark",
+      "description": "describe movie",
+      "release": "1981",
+      "genre": {
+        "name": "thriller",
+        "description": "placeholder description",
+      },
+      "director": {
+        "name": "placeholder",
+        "bio": "placeholder bio",
+        "birth year": "1970",
+        "death year": "2023",
+      },
+      "imageUrl": 'link to image URL',
+      "featured": 'false'
+    },
+    {
+      "title": "La Dolce Vita",
+      "description": "describe movie",
+      "release": "1960",
+      "genre": {
+        "name": "comedy",
+        "description": "placeholder description",
+      },
+      "director": {
+        "name": "placeholder",
+        "bio": "placeholder bio",
+        "birth year": "1970",
+        "death year": "2023",
+      },
+      "imageUrl": "link to image URL",
+      "featured":false
+    }
   
-  /* res.send object replaces response.writeHead and response.end code */
-  app.get("/", (req, res) => {
-    res.send("Welcome to the Movie Find App!");
+  ];
+
+/* res.send object replaces response.writeHead and response.end code */
+app.get('/', (req, res) => {
+  res.send('Welcome to MyFlix Movie App!');
+});
+
+/* 1. GETs list of all movies */
+app.get('/movies', (req, res) => {
+    res.status(200).json(movies);
   });
+
+/* 2. GETs specific movie data by title */
+app.get('/movies/:title', (req, res) => {
+  const { title } = req.params;
+  const movie = movies.find( movie => movie.title === title );
+
+  if (movie) {
+    res.status(200).json(movie);
+  } else {
+    res.status(400).send('this movie doesn\'t exist!')
+  }
+})
+
+/* 3. GETs specific movie data by genre */
+app.get('/movies/genre/:genreName', (req, res) => {
+  const { genreName } = req.params;
+  const genre = movies.find( movie => movie.genre.name === genreName ).genre;
+
+  if (genre) {
+    res.status(200).json(genre);
+  } else {
+    res.status(400).send('this genre doesn\'t exist!')
+  }
+})
+
+/* 4. GETs specific movie data by director */
+app.get('/movies/director/:directorName', (req, res) => {
+  const { directorName } = req.params;
+  const director = movies.find( movie => movie.director.name === directorName ).director;
+
+  if (director) {
+    res.status(200).json(director);
+  } else {
+    res.status(400).send('this director doesn\'t exist!')
+  }
+})
+
+/* 5. POST: allows new users to register  */
+app.post('/users', (req, res) => {
+  const newUser = req.body;
+
+  if (newUser.name) {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).json(newUser);
+  } else {
+    res.status(400).send('user name required');
+  }
+})
+
+/* 6. PUT: allows user to update their userinfo */
+
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updateUser = req.body;
+  /* only use 2 = rather than 3 = as user.id is a number but id is  a string */
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    user.name = updateUser.name;
+    res.status(200).json(user);
+  } else {
+    res.status(400).send('user name not found')
+
+  }
+})
+
+/* 7. POST: allow users to add a movie to their favourites   */
+
+app.post('/users/:id/:movieTitle', (req, res) => {
+  const { id, movieTitle } = req.params;
   
-  /* error handler comes after all route calls and app.use but before app.listen */
-  app.use((err, req, res, next) => {
+  /* only use 2 = rather than 3 = as user.id is a number but id is  a string */
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    user.favoriteMovie.push(movieTitle);
+    res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
+  } else {
+    res.status(400).send('user name not found')
+
+  }
+})
+
+/* 8. DELETE: allow users to remove a movie from their favourites */
+
+app.delete('/users/:id/:movieTitle', (req, res) => {
+  const { id, movieTitle } = req.params;
+  
+  /* only use 2 = rather than 3 = as user.id is a number but id is  a string */
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    user.favoriteMovie = user.favoriteMovie.filter( title => title !== movieTitle )
+    res.status(200).send(`${movieTitle} has been removed from user ${id}'s array`);
+  } else {
+    res.status(400).send('user name not found')
+
+  }
+})
+
+/* 9. DELETE: allow users to de-register */
+
+app.delete('/users/:id', (req, res) => {
+  const { id } = req.params;
+  
+  /* only use 2 = rather than 3 = as user.id is a number but id is  a string */
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    users = users.filter( user => user.id != id )
+    res.status(200).send(` user ${id} has been successfully deleted `);
+  } else {
+    res.status(400).send('user name not found')
+
+  }
+})
+
+
+
+
+/* error handler comes after all route calls and app.use but before app.listen */
+app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send("It's not working right now!");
+    res.status(500).send('It\'s not working right now!');
   });
-  
-  /* listen for requests, replaces http.createServer code */
-  app.listen(8080, () => {
-    console.log("Your app is listening on port 8080.");
+
+/* listen for requests, replaces http.createServer code */
+app.listen(8080, () => {
+    console.log('Your app is listening on port 8080.');
   });
-  
+
+
+
