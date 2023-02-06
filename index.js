@@ -7,6 +7,14 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const uuid = require("uuid");
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+const Movies = Models.Movie;
+const Users = Models.User;
+const Directors = Models.Director;
+const Genres = Models.Genre;
+mongoose.connect('mongodb://localhost:27017/myflixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 /* invoking morgan, instead of myLogger() function */
 app.use(morgan('common', {
@@ -17,108 +25,7 @@ app.use(morgan('dev'));
 /* allows the return of multiple static files in response to a request */
 app.use(express.static('public'));
 app.use(bodyParser.json());
-
-let users = [
-  {
-    "id": "1.1",
-    "name": "John",
-    "favoriteMovie": []
-  },
-  {
-    "id": "1.2",
-    "name": "Sarah",
-    "favoriteMovie": ["Kill Bill"],
-  }
-];
-
-let movies = [
-    {
-      "title": "2001: A Space Odyssey",
-      "description": "describe movie",
-      "release": "1968",
-      "genre": {
-        "name": "comedy",
-        "description": "placeholder description",
-      },
-      "director": {
-        "name": "placeholder",
-        "bio": "placeholder bio",
-        "birth year": "1970",
-        "death year": "2023",
-      },
-      "imageUrl": "link to image URL",
-      "featured":false
-    },
-    {
-      "title": "The Godfather",
-      "description": "describe movie",
-      "release": "1972",
-      "genre": {
-        "name": "thriller",
-        "description": "placeholder description",
-      },
-      "director": {
-        "name": "placeholder",
-        "bio": "placeholder bio",
-        "birth year": "1970",
-        "death year": "2023",
-      },
-      "imageUrl": "link to image URL",
-      "featured":false
-    },
-    {
-      "title": "Citizen Kane",
-      "description": "describe movie",
-      "release": "1941",
-      "genre": {
-        "name": "comedy",
-        "description": "placeholder description",
-      },
-      "director": { 
-        "name": "placeholder",
-        "bio": "placeholder bio",
-        "birth year": "1970",
-        "death year": "2023",
-      },
-      "imageUrl": "link to image URL",
-      "featured":false
-    },
-    {
-      "title": "Raiders of the Lost Ark",
-      "description": "describe movie",
-      "release": "1981",
-      "genre": {
-        "name": "thriller",
-        "description": "placeholder description",
-      },
-      "director": {
-        "name": "placeholder",
-        "bio": "placeholder bio",
-        "birth year": "1970",
-        "death year": "2023",
-      },
-      "imageUrl": 'link to image URL',
-      "featured": 'false'
-    },
-    {
-      "title": "La Dolce Vita",
-      "description": "describe movie",
-      "release": "1960",
-      "genre": {
-        "name": "comedy",
-        "description": "placeholder description",
-      },
-      "director": {
-        "name": "placeholder",
-        "bio": "placeholder bio",
-        "birth year": "1970",
-        "death year": "2023",
-      },
-      "imageUrl": "link to image URL",
-      "featured":false
-    }
-  
-  ];
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 /* res.send object replaces response.writeHead and response.end code */
 app.get('/', (req, res) => {
@@ -168,16 +75,30 @@ app.get('/movies/director/:directorName', (req, res) => {
 
 /* 5. POST: allows new users to register  */
 app.post('/users', (req, res) => {
-  const newUser = req.body;
-
-  if (newUser.name) {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).json(newUser);
-  } else {
-    res.status(400).send('user name required');
-  }
-})
+  Users.findOne({ Username: req.body.Username })
+  .then ((user) => {
+    if(user) {
+      return res.status(400).send(req.body.Username + 'already exists');
+    } else{
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+    })
+    .then((user) => {res.status(201).json(user) })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    })
+    }
+  }) 
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+  });
+});
 
 /* 6. PUT: allows user to update their userinfo */
 
