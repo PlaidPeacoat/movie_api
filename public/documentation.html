@@ -66,7 +66,7 @@
 
       <tr>
         <td>Returns data about a genre by title</td>
-        <td>/movies/genre/:genreName</td>
+        <td>/movies/genre/:Name</td>
         <td>GET</td>
         <td>:genreName</td>
         <td>-</td>
@@ -75,7 +75,7 @@
 
       <tr>
         <td>Returns data about a director by name</td>
-        <td>/movies/director/:directorName</td>
+        <td>/movies/director/:Name</td>
         <td>GET</td>
         <td>:directorName</td>
         <td>-</td>
@@ -87,7 +87,12 @@
         <td>/users</td>
         <td>POST</td>
         <td>-</td>
-        <td>A JSON object holding data about the user to add, structured like: { "name" : "John" }</td>
+        <td>A JSON object holding data about the user to add, structured like: {
+          Username: req.body.Username,
+          Password: req.body.Password,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday
+        }</td>
         <td>A JSON object holding data about the user that was added</td>
       </tr>
 
