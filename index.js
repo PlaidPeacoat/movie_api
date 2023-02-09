@@ -45,19 +45,23 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
 
 
 // get movies by title
-app.get('/movies/:title', (req, res) => {
-  Movies.findOne({ Title: req.params.title})
-  .then((movie) => {
-    res.status(200).json(movie);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  });
-});
+app.get(
+  '/movies/:Title',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+      Movies.findOne({ Title: req.params.Title })
+          .then((movie) => {
+              res.json(movie);
+          })
+          .catch((err) => {
+              console.log(err);
+              res.status(500).send('Error: ' + err);
+          });
+  }
+);
 
 //Get genre by Name
-app.get('/movies/genres/:Name', (req, res) => {
+app.get('/movies/genres/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ "Genre.Name": req.params.Name})
   .then((movies) => {
     res.send(movies.Genre);
@@ -70,7 +74,7 @@ app.get('/movies/genres/:Name', (req, res) => {
 
 
 //Get director data by Name
-app.get('/movies/directors/:Name', (req, res) => {
+app.get('/movies/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log(req.query.Name)
   Movies.findOne({"Director.Name": req.params.Name})
   .then((movies) => {
@@ -83,7 +87,7 @@ app.get('/movies/directors/:Name', (req, res) => {
 });
 
 // Get all user (Read in Mongoose)
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find()
   .then((users) => {
     res.status(201).json(users);
@@ -95,7 +99,7 @@ app.get('/users', (req, res) => {
 });
 
 //Get a user by username
-app.get('/users/:Username', (req, res) => {
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username})
   .then((User) => {
     res.status(200).json(User)
@@ -107,7 +111,7 @@ app.get('/users/:Username', (req, res) => {
 })
 
 // // Allow new users register (create)
-app.post('/users', (req, res) => {
+app.post('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
@@ -134,7 +138,7 @@ app.post('/users', (req, res) => {
 });
 
 // Allow users update their user info (Update)
-app.put('/users/:Username', (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username},
     { $set:
       {
@@ -156,7 +160,7 @@ app.put('/users/:Username', (req, res) => {
   });
 
   // Allow users add to their list of Favorites (create)
-  app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
       $push: { FavoriteMovies: req.params.MovieID }
     },
@@ -172,7 +176,7 @@ app.put('/users/:Username', (req, res) => {
   } );
 
   //Delete movie from favorite list
-  app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+  app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username}, {
       $pull: { FavoriteMovies: req.params.MovieID }
     },
@@ -188,7 +192,7 @@ app.put('/users/:Username', (req, res) => {
   });
 
   //Allow existing users deregister
-  app.delete('/users/:Username', (req, res) => {
+  app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if(!user) {
@@ -203,7 +207,7 @@ app.put('/users/:Username', (req, res) => {
     });
   });
 
-  app.get('/documentation', (req, res) => {
+  app.get('/documentation', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.sendFile('public/documentation.html', {root: __dirname});
   });
 
