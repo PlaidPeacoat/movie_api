@@ -11,11 +11,11 @@ let movieSchema = mongoose.Schema({
     },
     Director: {
         Name: String,
-        Bio: String
+        Bio: String,
+        Birthyear: String,
+        Deathyear: String
     },
-    Actors: [String],
-    ImagePath: String,
-    Feautured: Boolean
+    Featured: Boolean
 });
 
 let userSchema = mongoose.Schema({
