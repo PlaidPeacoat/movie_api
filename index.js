@@ -42,6 +42,8 @@ require("./passport");
 
 mongoose.connect(process.env.CONNECTION_URI,{ useNewUrlParser: true, useUnifiedTopology: true,});
 
+//mongodb+srv://plaidpeacoat:Spring2023@myflixdb.nagm25b.mongodb.net/myflixDB?retryWrites=true&w=majority
+//mongodb+srv://<credentials>@myflixdb.nagm25b.mongodb.net/myflixDB?appName=mongosh+1.6.2
 // GET requests
 app.get("/", (req, res) => {
   res.send("Welcome to my movie API!");
