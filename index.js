@@ -17,6 +17,11 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
 });
 
 app.use(morgan("common", { stream: accessLogStream }));
+
+app.get("/", (req, res) => {
+  res.status(500).send("responded")
+});
+
 app.use(express.static("public"));
 
 app.use(bodyParser.json());
@@ -283,9 +288,7 @@ app.get("/documentation", (req, res) => {
   res.sendFile("public/documentation.html", { root: __dirname });
 });
 
-app.get("/", (req, res) => {
-  res.status(500).send("responded")
-});
+
 
 // Error
 app.use((err, req, res, next) => {
