@@ -284,7 +284,7 @@ app.get("/documentation", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send('Welcome to MyFlix!!');
+  res.send("responded")
 });
 
 // Error
