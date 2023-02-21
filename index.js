@@ -284,7 +284,7 @@ app.get("/documentation", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("responded")
+  res.status(500).send("responded")
 });
 
 // Error
