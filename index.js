@@ -19,7 +19,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
 app.use(morgan("common", { stream: accessLogStream }));
 
 app.get("/", (req, res) => {
-  res.status(500).send("responded")
+  res.send("Welcome to myFlix!")
 });
 
 app.use(express.static("public"));
