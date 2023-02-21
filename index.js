@@ -45,9 +45,7 @@ mongoose.connect(process.env.CONNECTION_URI,{ useNewUrlParser: true, useUnifiedT
 //mongodb+srv://plaidpeacoat:Spring2023@myflixdb.nagm25b.mongodb.net/myflixDB?retryWrites=true&w=majority
 //mongodb+srv://<credentials>@myflixdb.nagm25b.mongodb.net/myflixDB?appName=mongosh+1.6.2
 // GET requests
-app.get('/ss', (req, res) => {
-  res.send('Welcome to MyFlix!!');
-});
+
 
 app.post("/users", [
   //validation logic goes here
@@ -285,11 +283,17 @@ app.get("/documentation", (req, res) => {
   res.sendFile("public/documentation.html", { root: __dirname });
 });
 
+app.get("/", (req, res) => {
+  res.send('Welcome to MyFlix!!');
+});
+
 // Error
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("There was an error. Please try again later.");
 });
+
+
 
 // listen for requests
 const port = process.env.PORT || 8080;
