@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 let allowedOrigins = [
   'http://localhost:1234',
-  'https://my-moviemate.netlify.app',
+  'https://myflix-a-sears.netlify.app',
 ];
 
 app.use(
