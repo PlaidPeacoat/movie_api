@@ -379,14 +379,14 @@ app.post(
 );
 
 // Removes movie from user's list of favourites
-app.delete(
-  '/users/:username/topMovies/:movieid',
+app.put(
+  '/movies/:movieid',
   passport.authenticate('jwt', { session: false }),
   function (req, res) {
-    Users.findOneAndUpdate(
-      { Username: req.params.username },
+    Movies.findOneAndUpdate(
+      { _id: req.params.movieid },
       {
-        $pull: { TopMovies: req.params.movieid },
+        $set: { ImagePath: req.body.ImagePath },
       },
       { new: true }
     )
