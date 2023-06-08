@@ -8,6 +8,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // CORS middleware
+/**
+ * CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+ * https://www.npmjs.com/package/cors
+ */
 const cors = require('cors');
 let allowedOrigins = [
   'http://localhost:1234',
@@ -40,7 +44,13 @@ require('./passport.js');
 
 // Input validation
 const { check, validationResult } = require('express-validator');
-
+/**
+ * Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.
+ * https://www.npmjs.com/package/mongoose
+ * https://mongoosejs.com/
+ * https://mongoosejs.com/docs/guide.html
+ * https://mongoosejs.com/docs/api.html
+ */
 // Integrating Mongoose and connecting to MongoDB
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -55,7 +65,10 @@ mongoose.connect("mongodb+srv://plaidpeacoat:Spring2023@myflixdb.nagm25b.mongodb
 
 //Routing of static files (e.g. documentation.html)
 app.use(express.static('public'));
-
+/**
+ * Morgan is a HTTP request logger middleware for Node.js.
+ * https://www.npmjs.com/package/morgan
+ */
 // Logging requests
 const morgan = require('morgan');
 const fs = require('fs');
@@ -71,7 +84,13 @@ app.use(morgan('common', { stream: accessLogStream }));
 app.get('/', function (req, res) {
   res.send('Movie database is being contructed.');
 });
-
+/**
+ * Returns a list of all users
+ * @method GET
+ * @param {string} endpoint - /users
+ * @param {function} callback - function(req, res)
+ * @returns {object} - JSON object containing all users
+ */
 // Returns list of all movies
 app.get(
   '/movies',
