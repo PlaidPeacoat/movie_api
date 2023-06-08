@@ -12,6 +12,7 @@ const cors = require('cors');
 let allowedOrigins = [
   'http://localhost:1234',
   'https://myflix-a-sears.netlify.app',
+  'https://PlaidPeacoat.github.io/MyFlix-Angular-Client'
 ];
 
 // app.use(
